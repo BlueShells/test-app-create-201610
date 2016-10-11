@@ -329,13 +329,9 @@ def main():
         logger.debug(podStatus(pod))
 
         if not pod['status']:
-            logger.debug("no pod status")
-
-        if pod['status'] and not "build" in pod['metadata']['name']:
-            logger.debug('Polling Pod status: %s' % pod['status']['phase'])
+            logger.error("no pod status")
 
         if pod['status'] and "build" in pod['metadata']['name']:
-            logger.debug('Polling Build Pod status: %s' % pod['status']['phase'])
             build_ran = 1
 
         if pod['status']['phase'] == 'Running' \
