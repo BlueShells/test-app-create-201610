@@ -189,7 +189,7 @@ class OpenShiftOC(object):
         if project:
             project_uid = project['metadata']['uid']
         else:
-            print "Failed finding project uid!"
+            logger.error("Failed finding project uid!")
             return 0
         # find logging pod
         get_log_pods_cmd = ['get', 'pods', '-o', 'json', '-n', 'logging']
@@ -207,9 +207,9 @@ class OpenShiftOC(object):
                 delete_cmd = ['exec', pod['metadata']['name'], '-n', 'logging', '--'] + curl_cmd
                 delete_results = self.oc_cmd(delete_cmd)
                 if self.verbose:
-                    print delete_results
+                    logger.debug(delete_results)
                 return delete_results
-        print "Failed finding logging pod"
+        logger.error("Failed finding logging pod")
         return 0
 
 def curl(ip_addr, port):
@@ -223,11 +223,9 @@ def curl(ip_addr, port):
     except urllib2.HTTPError, e:
         code = e.fp.getcode()
     except urllib2.URLError, e:
-        print "timed out in %s seconds opening http://%s:%s" % \
-            (timeout, ip_addr, port)
+        logger.error("timed out in %s seconds opening http://%s:%s" % \
+            (timeout, ip_addr, port))
     return code
-
-
 
 def parse_args():
     """ parse the args from the cli """
@@ -255,7 +253,7 @@ def send_zagg_data(build_ran, create_app, http_code, run_time):
     ''' send data to Zagg'''
     zgs_time = time.time()
     zgs = ZaggSender()
-    print "Send data to Zagg"
+    logger.info("Send data to Zagg")
     if build_ran == 1:
         zgs.add_zabbix_keys({'openshift.master.app.build.create': create_app})
         zgs.add_zabbix_keys({'openshift.master.app.build.create.code': http_code})
@@ -267,8 +265,8 @@ def send_zagg_data(build_ran, create_app, http_code, run_time):
     try:
         zgs.send_metrics()
     except:
-        print "Error sending to Zagg: %s \n %s " % sys.exc_info()[0], sys.exc_info()[1]
-    print "Data sent in %s seconds" % str(time.time() - zgs_time)
+        logger.error("Error sending to Zagg: %s \n %s " % sys.exc_info()[0], sys.exc_info()[1])
+    logger.info("Data sent in %s seconds" % str(time.time() - zgs_time))
 
 
 def handle_fail(run_time, oocmd, pod):
