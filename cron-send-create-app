@@ -310,13 +310,17 @@ def main():
     for _ in range(120):
         time.sleep(5)
         pod = oocmd.get_pod()
-        if pod and pod['status'] and not "build" in pod['metadata']['name']:
+
+        if not pod:
+            logger.debug("cannot find pod")
+            continue # cannot test pod further
+
+        if pod['status'] and not "build" in pod['metadata']['name']:
             logger.debug('Polling Pod status: %s' % pod['status']['phase'])
-        if pod and pod['status'] and "build" in pod['metadata']['name']:
+        if pod['status'] and "build" in pod['metadata']['name']:
             logger.debug('Polling Build Pod status: %s' % pod['status']['phase'])
             build_ran = 1
-        if pod \
-            and pod['status']['phase'] == 'Running' \
+        if pod['status']['phase'] == 'Running' \
             and pod['status'].has_key('podIP') \
             and not "build" in pod['metadata']['name']:
             route = oocmd.get_route()
