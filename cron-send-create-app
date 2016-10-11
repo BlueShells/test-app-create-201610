@@ -293,7 +293,10 @@ def podStatus(pod):
     #return yaml.dump(pod, default_flow_style=False)
     return "%s %s" % (pod['metadata']['name'], pod['status']['phase'])
 
-def main():
+def setup(config):
+    return True
+
+def test(config):
     ''' Do the application creation
     '''
     print '################################################################################'
@@ -361,6 +364,18 @@ def main():
     oocmd.delete_es_index()
     oocmd.delete_project()
     send_zagg_data(build_ran, create_app, http_code, run_time)
+
+def teardown(config):
+    return True
+
+def main():
+    config = {
+
+    }
+
+    response = setup(config)
+    response = test(config)
+    response = teardown(config)
 
 if __name__ == "__main__":
     main()
