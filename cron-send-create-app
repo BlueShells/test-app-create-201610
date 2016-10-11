@@ -307,12 +307,11 @@ def test(config):
     namespace = '-'.join(['ops-health', pod_name(args.name), os.environ['ZAGG_CLIENT_HOSTNAME'], ])
 
     oocmd = OpenShiftOC(namespace, kubeconfig, args, verbose=False)
-    app = args.name
 
     oocmd.delete_project()
     start_time = time.time()
     oocmd.new_project()
-    oocmd.new_app(app)
+    oocmd.new_app(args.name)
 
     create_app = 1
     build_ran = 0
