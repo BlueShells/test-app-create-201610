@@ -326,10 +326,11 @@ def main():
             logger.debug("cannot find pod")
             continue # cannot test pod further
 
-        logger.debug(podStatus(pod))
-
         if not pod['status']:
             logger.error("no pod status")
+            continue # cannot test pod further
+
+        logger.debug(podStatus(pod))
 
         if pod['status'] and "build" in pod['metadata']['name']:
             build_ran = 1
