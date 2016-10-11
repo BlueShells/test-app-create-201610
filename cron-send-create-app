@@ -315,11 +315,16 @@ def main():
             logger.debug("cannot find pod")
             continue # cannot test pod further
 
+        if not pod['status']:
+            logger.debug("no pod status")
+
         if pod['status'] and not "build" in pod['metadata']['name']:
             logger.debug('Polling Pod status: %s' % pod['status']['phase'])
+
         if pod['status'] and "build" in pod['metadata']['name']:
             logger.debug('Polling Build Pod status: %s' % pod['status']['phase'])
             build_ran = 1
+
         if pod['status']['phase'] == 'Running' \
             and pod['status'].has_key('podIP') \
             and not "build" in pod['metadata']['name']:
