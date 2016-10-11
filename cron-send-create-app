@@ -301,7 +301,7 @@ def main():
     print '################################################################################'
     kubeconfig = copy_kubeconfig('/tmp/admin.kubeconfig')
     args = parse_args()
-    namespace = 'ops-health' + pod_name(args.name) + '-' + os.environ['ZAGG_CLIENT_HOSTNAME']
+    namespace = '-'.join(['ops-health', pod_name(args.name), os.environ['ZAGG_CLIENT_HOSTNAME'], ])
 
     oocmd = OpenShiftOC(namespace, kubeconfig, args, verbose=False)
     app = args.name
