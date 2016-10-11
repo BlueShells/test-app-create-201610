@@ -273,16 +273,16 @@ def send_zagg_data(build_ran, create_app, http_code, run_time):
 
 def handle_fail(run_time, oocmd, pod):
     ''' Print failure info '''
-    print 'Finished.'
-    print 'State: Fail'
-    print 'Time: %s' % run_time
-    print 'Fetching Events:'
+    logger.info('Finished.')
+    logger.info('State: Fail')
+    logger.info('Time: %s' % run_time)
+    logger.info('Fetching Events:')
     oocmd.verbose = True
-    print oocmd.get_events()
-    print 'Fetching Logs:'
-    print oocmd.get_logs()
-    print 'Fetching Pod:'
-    print pod
+    logger.info(oocmd.get_events())
+    logger.info('Fetching Logs:')
+    logger.info(oocmd.get_logs())
+    logger.info('Fetching Pod:')
+    logger.info(pod)
 
 def main():
     ''' Do the application creation
@@ -313,9 +313,9 @@ def main():
         time.sleep(5)
         pod = oocmd.get_pod()
         if pod and pod['status'] and not "build" in pod['metadata']['name']:
-            print 'Polling Pod status: %s' % pod['status']['phase']
+            logger.debug('Polling Pod status: %s' % pod['status']['phase'])
         if pod and pod['status'] and "build" in pod['metadata']['name']:
-            print 'Polling Build Pod status: %s' % pod['status']['phase']
+            logger.debug('Polling Build Pod status: %s' % pod['status']['phase'])
             build_ran = 1
         if pod \
             and pod['status']['phase'] == 'Running' \
@@ -329,11 +329,11 @@ def main():
                 service = oocmd.get_service()
                 http_code = curl(service['items'][0]['spec']['clusterIP'], \
                     service['items'][0]['spec']['ports'][0]['port'])
-            print 'Finished.'
-            print 'Deploy State: Success'
-            print 'Service HTTP response code: %s' % http_code
+            logger.debug('Finished.')
+            logger.debug('Deploy State: Success')
+            logger.debug('Service HTTP response code: %s' % http_code)
             run_time = str(time.time() - start_time)
-            print 'Time: %s' % run_time
+            logger.debug('Time: %s' % run_time)
             create_app = 0
             break
 
