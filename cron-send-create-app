@@ -166,7 +166,7 @@ class OpenShiftOC(object):
         '''Base command for oadm '''
         cmds = ['/usr/bin/oadm']
         cmds.extend(cmd)
-        print ' '.join(cmds)
+        logger.info(' '.join(cmds))
         proc = subprocess.Popen(cmds, stdout=subprocess.PIPE, stderr=subprocess.PIPE, \
                                 env={'KUBECONFIG': self.kubeconfig, \
                                      'PATH': os.environ["PATH"]})
