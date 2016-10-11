@@ -27,6 +27,7 @@ import random
 import argparse
 import datetime
 import sys
+import yaml
 
 # Our jenkins server does not include these rpms.
 # In the future we might move this to a container where these
@@ -282,6 +283,11 @@ def handle_fail(run_time, oocmd, pod):
     logger.info('Fetching Pod:')
     logger.info(pod)
 
+def podStatus(pod):
+    if not pod:
+        return "no pod"
+    return yaml.dump(pod, default_flow_style=False)
+
 def main():
     ''' Do the application creation
     '''
@@ -314,6 +320,8 @@ def main():
         if not pod:
             logger.debug("cannot find pod")
             continue # cannot test pod further
+
+        logger.debug(podStatus(pod))
 
         if not pod['status']:
             logger.debug("no pod status")
