@@ -147,7 +147,7 @@ class OpenShiftOC(object):
         '''Base command for oc '''
         cmds = ['/usr/bin/oc']
         cmds.extend(cmd)
-        logger.info(' '.join(cmds))
+        logger.debug(' '.join(cmds))
         proc = subprocess.Popen(cmds, stdout=subprocess.PIPE, stderr=subprocess.PIPE, \
                                 env={'KUBECONFIG': self.kubeconfig, \
                                      'PATH': os.environ["PATH"]})
@@ -166,7 +166,7 @@ class OpenShiftOC(object):
         '''Base command for oadm '''
         cmds = ['/usr/bin/oadm']
         cmds.extend(cmd)
-        logger.info(' '.join(cmds))
+        logger.debug(' '.join(cmds))
         proc = subprocess.Popen(cmds, stdout=subprocess.PIPE, stderr=subprocess.PIPE, \
                                 env={'KUBECONFIG': self.kubeconfig, \
                                      'PATH': os.environ["PATH"]})
@@ -313,7 +313,7 @@ def test(config, oocmd=None,):
             logger.error("no pod status")
             continue # cannot test pod further
 
-        logger.debug(getPodStatus(pod))
+        logger.info(getPodStatus(pod))
 
         if pod['status'] and "build" in pod['metadata']['name']:
             build_ran = 1
