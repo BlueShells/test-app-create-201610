@@ -284,7 +284,7 @@ def setup(config, oocmd=None,):
     return True
 
 def test(config, oocmd=None,):
-    oocmd.new_app(config.applicationName)
+    oocmd.new_app(config['applicationName'])
 
     create_app = 1
     build_ran = 0
@@ -396,16 +396,16 @@ def main():
     # send data to zabbix
     try:
         send_zagg_data(
-            test_response.build_ran,
-            test_response.create_app,
-            test_response.http_code,
+            test_response['build_ran'],
+            test_response['create_app'],
+            test_response['http_code'],
             run_time
         )
     except Exception as e:
         logger.critical('problem sending zabbix data')
         logger.critical(e)
 
-    if test_response.failed:
+    if test_response['failed']:
         try:
             logger.critical('Deploy State: Fail')
             logger.info('Fetching Events:')
@@ -414,13 +414,13 @@ def main():
             logger.info('Fetching Logs:')
             logger.info(oocmd.get_logs())
             logger.info('Fetching Pod:')
-            logger.info(test_response.pod)
+            logger.info(test_response['pod'])
         except Exception as e:
             logger.critical('problem fetching additional error data')
             logger.critical(e)
     else:
         logger.info('Deploy State: Success')
-        logger.info('Service HTTP response code: %s' % test_response.http_code)
+        logger.info('Service HTTP response code: %s' % test_response['http_code'])
 
 
     # cleanup project
