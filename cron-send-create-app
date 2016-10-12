@@ -336,19 +336,19 @@ def test(config, oocmd=None,):
                     service['items'][0]['spec']['ports'][0]['port'])
 
             return {
-                'pod': pod,
                 'build_ran': build_ran,
                 'create_app': 0, # app create succeeded
                 'http_code': http_code,
                 'failed': (http_code != 200), # must be 200 to succeed
+                'pod': pod,
             }
 
     return {
-        'pod': pod,
         'build_ran': build_ran,
         'create_app': 1, # app create failed
         'http_code': http_code,
         'failed': True,
+        'pod': pod,
     }
 
 
@@ -390,11 +390,11 @@ def main():
         logger.critical('problem running test')
         logger.critical(e)
         test_response = {
-            'pod': None,
             'build_ran': 0,
             'create_app': 1, # app create failed
             'http_code': 0,
             'failed': True,
+            'pod': None,
         }
     logger.debug("test_response")
     logger.debug(test_response)
