@@ -12,7 +12,7 @@ logging.basicConfig(
     format='%(asctime)s - %(relativeCreated)6d - %(levelname)-8s - %(message)s',
 )
 logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 
 import subprocess
 import json
@@ -366,6 +366,10 @@ def main():
     logger.debug("main()")
 
     args = parse_args()
+
+    if args.verbose:
+        logger.setLevel(logging.DEBUG)
+
     kubeconfig = copy_kubeconfig('/tmp/admin.kubeconfig')
     namespace = '-'.join(['ops-health', pod_name(args.name), os.environ['ZAGG_CLIENT_HOSTNAME'], ])
 
