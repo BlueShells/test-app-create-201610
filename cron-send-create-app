@@ -213,6 +213,8 @@ class OpenShiftOC(object):
         return 0
 
 def curl(ip_addr, port):
+    logger.debug("curl()")
+
     ''' Open an http connection to the url and read
     '''
     code = 0
@@ -228,6 +230,7 @@ def curl(ip_addr, port):
     return code
 
 def parse_args():
+    logger.debug("parse_args()")
     """ parse the args from the cli """
 
     parser = argparse.ArgumentParser(description='OpenShift app create end-to-end test')
@@ -237,6 +240,7 @@ def parse_args():
     return parser.parse_args()
 
 def pod_name(name):
+    logger.debug("pod_name()")
     """ strip pre/suffices from app name to get pod name """
     # for app deploy "https://github.com/openshift/hello-openshift:latest", pod name is hello-openshift
     if 'http' in name:
@@ -250,6 +254,7 @@ def pod_name(name):
     return name
 
 def send_zagg_data(build_ran, create_app, http_code, run_time):
+    logger.debug("send_zagg_data()")
     ''' send data to Zagg'''
     zgs_time = time.time()
     zgs = ZaggSender()
@@ -269,6 +274,7 @@ def send_zagg_data(build_ran, create_app, http_code, run_time):
     logger.info("Data sent in %s seconds" % str(time.time() - zgs_time))
 
 def getPodStatus(pod):
+    logger.debug("getPodStatus()")
     if not pod:
         return "no pod"
 
@@ -278,12 +284,14 @@ def getPodStatus(pod):
     return "%s %s" % (pod['metadata']['name'], pod['status']['phase'])
 
 def setup(config, oocmd=None,):
+    logger.debug('setup()')
     oocmd.delete_project()
     oocmd.new_project()
 
     return True
 
 def test(config, oocmd=None,):
+    logger.debug('test()')
     oocmd.new_app(config['applicationName'])
 
     create_app = 1
@@ -345,6 +353,7 @@ def test(config, oocmd=None,):
 
 
 def teardown(config, oocmd=None,):
+    logger.debug('teardown()')
     oocmd.delete_es_index()
     oocmd.delete_project()
 
@@ -354,6 +363,7 @@ def main():
     print '################################################################################'
     print '  Starting App Create - %s' % datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
     print '################################################################################'
+    logger.debug("main()")
 
     args = parse_args()
     kubeconfig = copy_kubeconfig('/tmp/admin.kubeconfig')
@@ -386,6 +396,8 @@ def main():
             'http_code': 0,
             'failed': True,
         }
+    logger.debug("test_response")
+    logger.debug(test_response)
 
     # finish time tracking
     run_time = str(time.time() - start_time)
