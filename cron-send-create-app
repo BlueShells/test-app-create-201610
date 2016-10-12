@@ -284,14 +284,14 @@ def getPodStatus(pod):
     return "%s %s" % (pod['metadata']['name'], pod['status']['phase'])
 
 def setup(config, oocmd=None,):
-    logger.debug('setup()')
+    logger.info('setup()')
     oocmd.delete_project()
     oocmd.new_project()
 
     return True
 
 def test(config, oocmd=None,):
-    logger.debug('test()')
+    logger.info('test()')
     oocmd.new_app(config['applicationName'])
 
     create_app = 1
@@ -353,7 +353,7 @@ def test(config, oocmd=None,):
 
 
 def teardown(config, oocmd=None,):
-    logger.debug('teardown()')
+    logger.info('teardown()')
     oocmd.delete_es_index()
     oocmd.delete_project()
 
