@@ -259,6 +259,7 @@ def send_zagg_data(build_ran, create_app, http_code, run_time):
     zgs_time = time.time()
     zgs = ZaggSender()
     logger.info("Send data to Zagg")
+
     if build_ran == 1:
         zgs.add_zabbix_keys({'openshift.master.app.build.create': create_app})
         zgs.add_zabbix_keys({'openshift.master.app.build.create.code': http_code})
@@ -267,11 +268,12 @@ def send_zagg_data(build_ran, create_app, http_code, run_time):
         zgs.add_zabbix_keys({'openshift.master.app.create': create_app})
         zgs.add_zabbix_keys({'openshift.master.app.create.code': http_code})
         zgs.add_zabbix_keys({'openshift.master.app.create.time': run_time})
+
     try:
         zgs.send_metrics()
+        logger.info("Data sent to Zagg in %s seconds" % str(time.time() - zgs_time))
     except:
-        logger.error("Error sending to Zagg: %s \n %s " % sys.exc_info()[0], sys.exc_info()[1])
-    logger.info("Data sent in %s seconds" % str(time.time() - zgs_time))
+        logger.error("Error sending data to Zagg: %s \n %s " % sys.exc_info()[0], sys.exc_info()[1])
 
 def getPodStatus(pod):
     logger.debug("getPodStatus()")
