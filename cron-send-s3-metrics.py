@@ -30,10 +30,19 @@ from openshift_tools.monitoring.zagg_sender import ZaggSender
 import sys
 import yaml
 
+import logging
+logging.basicConfig(
+    format='%(asctime)s - %(relativeCreated)6d - %(levelname)-8s - %(message)s',
+)
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
 def parse_args():
     '''Parse the arguments for this script'''
 
     parser = argparse.ArgumentParser(description="Tool to get S3 bucket stats")
+    parser.add_argument('-v', '--verbose', default=False,
+                        action="store_true", help="verbose")
     parser.add_argument('-d', '--debug', default=False,
                         action="store_true", help="debug mode")
     parser.add_argument('-t', '--test', default=False,
@@ -73,6 +82,7 @@ def get_aws_creds(yaml_results):
 
 def main():
     ''' Gather and send details on all visible S3 buckets '''
+    logger.info("start")
 
     discovery_key = "disc.aws"
     discovery_macro = "#S3_BUCKET"
@@ -80,6 +90,10 @@ def main():
     prototype_s3_count = "disc.aws.objects"
 
     args = parse_args()
+
+    if args.verbose:
+        logger.setLevel(logging.DEBUG)
+        logger.debug("verbose flag set")
 
     ocutil = OCUtil()
     dc_yaml = ocutil.get_dc('docker-registry')
