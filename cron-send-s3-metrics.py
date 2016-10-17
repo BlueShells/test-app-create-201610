@@ -97,6 +97,8 @@ def main():
 
     ocutil = OCUtil()
     dc_yaml = ocutil.get_dc('docker-registry')
+    logger.debug("dc_yaml: %s", dc_yaml)
+
     registry_config_secret = get_registry_config_secret(dc_yaml)
 
     oc_yaml = ocutil.get_secrets(registry_config_secret)
