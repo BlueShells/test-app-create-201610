@@ -60,11 +60,11 @@ def get_registry_config_secret(yaml_results):
     for volume in volumes:
         if 'emptyDir' in volume:
             continue
-        secret_yaml = ocutil.get_secrets(volume['secret']['secretName'])
-        logger.debug("secret_yaml: %s", secret_yaml)
+        secret = ocutil.get_secrets(volume['secret']['secretName'])
+        logger.debug("secret_yaml: %s", secret)
 
-        secret_dict = yaml.safe_load(secret_yaml)
-        if 'config.yml' in secret_dict['data']:
+        # secret_dict = yaml.safe_load(secret_yaml)
+        if 'config.yml' in secret['data']:
             return volume['secret']['secretName']
 
     print "Unable to find the %s the docker registry config"
