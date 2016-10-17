@@ -53,7 +53,7 @@ def parse_args():
 def get_registry_config_secret(yaml_results):
     ''' Find the docker registry config secret '''
     logger.debug("get_registry_config_secret(yaml_results):")
-    logger.debug("yaml_results: %s", dc_yaml)
+    logger.debug("yaml_results: %s", yaml_results)
 
     ocutil = OCUtil()
     volumes = yaml_results['spec']['template']['spec']['volumes']
