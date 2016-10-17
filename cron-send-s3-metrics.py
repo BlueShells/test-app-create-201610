@@ -52,6 +52,8 @@ def parse_args():
 
 def get_registry_config_secret(yaml_results):
     ''' Find the docker registry config secret '''
+    logger.debug("get_registry_config_secret(yaml_results):")
+    logger.debug("yaml_results: %s", dc_yaml)
 
     ocutil = OCUtil()
     volumes = yaml_results['spec']['template']['spec']['volumes']
@@ -59,6 +61,8 @@ def get_registry_config_secret(yaml_results):
         if 'emptyDir' in volume:
             continue
         secret_yaml = ocutil.get_secrets(volume['secret']['secretName'])
+        logger.debug("secret_yaml: %s", secret_yaml)
+
         secret_dict = yaml.safe_load(secret_yaml)
         if 'config.yml' in secret_dict['data']:
             return volume['secret']['secretName']
@@ -97,8 +101,6 @@ def main():
 
     ocutil = OCUtil()
     dc_yaml = ocutil.get_dc('docker-registry')
-    logger.debug("dc_yaml: %s", dc_yaml)
-
     registry_config_secret = get_registry_config_secret(dc_yaml)
 
     oc_yaml = ocutil.get_secrets(registry_config_secret)
