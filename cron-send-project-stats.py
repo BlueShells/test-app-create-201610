@@ -5,6 +5,11 @@
 # to be different than the class name
 # pylint: disable=invalid-name
 
+# We just want to see any exception that happens
+# don't want the script to die under any cicumstances
+# script must try to clean itself up
+# pylint: disable=broad-except
+
 import time
 import argparse
 import datetime
