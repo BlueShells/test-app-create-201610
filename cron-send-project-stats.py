@@ -20,6 +20,8 @@ import argparse
 import datetime
 import sys
 
+from openshift_tools.monitoring.ocutil import OCUtil
+
 # Our jenkins server does not include these rpms.
 # In the future we might move this to a container where these
 # libs might exist
