@@ -50,7 +50,7 @@ def send_zagg_data(keep_time):
         logger.critical('Error sending to Zagg')
         logger.critical(e)
 
-    print "Data sent in %s seconds" % str(time.time() - zgs_time)
+    logger.info("Data sent in %s seconds", str(time.time() - zgs_time))
 
 def main():
     ''' main() '''
@@ -75,14 +75,15 @@ def main():
             )
 
             if project['status']['phase'] == 'Terminating':
-                print project['metadata']['deletionTimestamp']
+                logger.debug('project[\'metadata\'][\'deletionTimestamp\'] %s', project['metadata']['deletionTimestamp'])
+
                 temp_t = project['metadata']['deletionTimestamp'].replace('T', ' ').replace('Z', '')
                 old_time = datetime.datetime.strptime(temp_t, '%Y-%m-%d %H:%M:%S')
 
                 current_time = datetime.datetime.now()
 
                 time_keeps = current_time - old_time
-                print 'the project in Terminating status for %s' % time_keeps
+                logger.debug('Project in Terminating status for %s', time_keeps)
 
                 if current_time > old_time:
                     time_keeps_max = max(time_keeps_max, time_keeps.seconds)
