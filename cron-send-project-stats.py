@@ -63,16 +63,20 @@ def main():
 
     projects_info = OCUtil()._run_cmd("oc get projects -o yaml")
 
-    time_keeps_max = 0
     logger.info('Count of projects: %s', len(projects_info['items']))
 
     try:
-        for pro in projects_info['items']:
-            #print pro['status']['phase']
-            if 'Terminating' == pro['status']['phase']:
-                print 'found it '
-                print pro['metadata']['deletionTimestamp']
-                temp_t = pro['metadata']['deletionTimestamp'].replace('T', ' ').replace('Z', '')
+        time_keeps_max = 0
+        for project in projects_info['items']:
+            logger.debug(
+                "Project: [%s] Status: %s",
+                project['metadata']['name'],
+                project['status']['phase']
+            )
+
+            if project['status']['phase'] == 'Terminating':
+                print project['metadata']['deletionTimestamp']
+                temp_t = project['metadata']['deletionTimestamp'].replace('T', ' ').replace('Z', '')
                 old_time = datetime.datetime.strptime(temp_t, '%Y-%m-%d %H:%M:%S')
 
                 current_time = datetime.datetime.now()
