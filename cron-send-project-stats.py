@@ -92,9 +92,8 @@ def main():
 
                 logger.debug('%s', time_keeps_max)
 
-    except Exception as e:
-        logger.critical('Error checking projects')
-        logger.critical(e)
+    except:
+        logger.exception('Error checking projects')
 
     send_zagg_data(time_keeps_max)
     logger.info('Oldest Terminating project: %s seconds', time_keeps_max)
