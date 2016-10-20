@@ -212,20 +212,6 @@ def send_zagg_data(keep_time):
         print "Error sending to Zagg: %s \n %s " % sys.exc_info()[0], sys.exc_info()[1]
     print "Data sent in %s seconds" % str(time.time() - zgs_time)
 
-
-def handle_fail(run_time, oocmd, pod):
-    ''' Print failure info '''
-    print 'Finished.'
-    print 'State: Fail'
-    print 'Time: %s' % run_time
-    print 'Fetching Events:'
-    oocmd.verbose = True
-    print oocmd.get_events()
-    print 'Fetching Logs:'
-    print oocmd.get_logs()
-    print 'Fetching Pod:'
-    print pod
-
 def main():
     ''' main() '''
     args = parse_args()
