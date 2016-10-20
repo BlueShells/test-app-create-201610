@@ -28,13 +28,6 @@ from openshift_tools.monitoring.ocutil import OCUtil
 #pylint: disable=import-error
 from openshift_tools.monitoring.zagg_sender import ZaggSender
 
-# pylint: disable=bare-except
-def cleanup_file(inc_file):
-    ''' clean up '''
-    try:
-        os.unlink(inc_file)
-    except:
-        pass
 
 def copy_kubeconfig(config):
     ''' make a copy of the kubeconfig '''
