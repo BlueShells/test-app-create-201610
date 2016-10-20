@@ -1,26 +1,8 @@
 #!/usr/bin/env python
-''' OpenShift v3 Monitoring '''
-
-# Adding the ignore because it does not like the naming of the script
-# to be different than the class name
-# pylint: disable=invalid-name
-
-# We just want to see any exception that happens
-# don't want the script to die under any cicumstances
-# script must try to clean itself up
-# pylint: disable=broad-except
-
+import yaml
 import time
 import argparse
 import datetime
-
-from openshift_tools.monitoring.ocutil import OCUtil
-
-# Our jenkins server does not include these rpms.
-# In the future we might move this to a container where these
-# libs might exist
-#pylint: disable=import-error
-from openshift_tools.monitoring.zagg_sender import ZaggSender
 
 import logging
 logging.basicConfig(
@@ -29,27 +11,45 @@ logging.basicConfig(
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
+projects = yaml.load('''
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Project
+  metadata:
+    creationTimestamp: 2016-10-20 04:09:00
+    deletionTimestamp: 2016-10-20 04:10:55
+    name: terminating2
+  spec:
+    finalizers: [kubernetes]
+  status: {phase: Terminating}
+- apiVersion: v1
+  kind: Project
+  metadata:
+    creationTimestamp: 2016-10-20 03:45:34
+    deletionTimestamp: 2016-10-25 03:45:54
+    name: tempinating1
+  spec:
+    finalizers: [kubernetes]
+  status: {phase: Terminating}
+- apiVersion: v1
+  kind: Project
+  metadata:
+    creationTimestamp: 2016-10-19 11:37:45
+    name: test1
+  spec:
+    finalizers: [openshift.io/origin, kubernetes]
+  status: {phase: Active}
+kind: List
+metadata: {}
+''')
+
 def parse_args():
     """ parse the args from the cli """
 
     parser = argparse.ArgumentParser(description='OpenShift Monitoring Project Termination Stats')
     parser.add_argument('-v', '--verbose', action='store_true', default=None, help='Verbose?')
     return parser.parse_args()
-
-def send_zagg_data(keep_time):
-    ''' send data to Zagg'''
-    logger.debug('send_zagg_data()')
-
-    zgs_time = time.time()
-    zgs = ZaggSender()
-    zgs.add_zabbix_keys({'openshift.master.project.terminating.time': keep_time})
-
-    try:
-        zgs.send_metrics()
-    except:
-        logger.exception('Error sending to Zagg')
-
-    logger.info("Data sent in %s seconds", str(time.time() - zgs_time))
 
 def testProjects(projects, current_time=None,):
     logger.info('testProjects() count of projects: %s', len(projects))
@@ -88,15 +88,10 @@ def main():
 
     logger.info("Starting")
 
-    # TODO: include this in library
-    projects_info = OCUtil()._run_cmd("oc get projects -o yaml")
-
     time_keeps_max = testProjects(
-        projects_info['items']),
+        projects['items'],
         current_time=datetime.datetime.now()
     )
-
-    send_zagg_data(time_keeps_max)
     logger.info('Oldest Terminating project: %s seconds', time_keeps_max)
 
 if __name__ == "__main__":
