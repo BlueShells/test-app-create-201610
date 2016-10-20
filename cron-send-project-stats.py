@@ -5,18 +5,9 @@
 # to be different than the class name
 # pylint: disable=invalid-name
 
-import subprocess
-import json
 import time
-import re
-import os
-import atexit
-import shutil
-import string
-import random
 import argparse
 import datetime
-import sys
 
 from openshift_tools.monitoring.ocutil import OCUtil
 
