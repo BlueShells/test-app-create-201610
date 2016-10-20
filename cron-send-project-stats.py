@@ -60,6 +60,7 @@ def main():
 
     logger.info("Starting")
 
+    # TODO: include this in library
     projects_info = OCUtil()._run_cmd("oc get projects -o yaml")
 
     logger.info('Count of projects: %s', len(projects_info['items']))
