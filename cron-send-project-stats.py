@@ -26,6 +26,12 @@ from openshift_tools.monitoring.ocutil import OCUtil
 #pylint: disable=import-error
 from openshift_tools.monitoring.zagg_sender import ZaggSender
 
+import logging
+logging.basicConfig(
+    format='%(asctime)s - %(relativeCreated)6d - %(levelname)-8s - %(message)s',
+)
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 def copy_kubeconfig(config):
     ''' make a copy of the kubeconfig '''
