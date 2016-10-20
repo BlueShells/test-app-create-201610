@@ -227,17 +227,14 @@ def handle_fail(run_time, oocmd, pod):
     print pod
 
 def main():
-    ''' Do the application creation
-    '''
-    print '################################################################################'
-    print '  Starting Checking project status - %s' % datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-    print '################################################################################'
-    kubeconfig = copy_kubeconfig('/tmp/admin.kubeconfig')
+    ''' main() '''
     args = parse_args()
-    namespace = 'ops-project-info-check'
-    oocmd = OpenShiftOC(namespace, kubeconfig, args, verbose=False)
 
-    projects_info = oocmd.get_projects_json()
+    if args.verbose:
+        logger.setLevel(logging.DEBUG)
+
+    projects_info = ocutil._run_cmd("oc get projects -o yaml")
+
     #deletionTimestamp
     print 'start checking'
     print 'current project number is %s' % len(projects_info['items'])
