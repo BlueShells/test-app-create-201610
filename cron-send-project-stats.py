@@ -181,10 +181,8 @@ class OpenShiftOC(object):
 def parse_args():
     """ parse the args from the cli """
 
-    parser = argparse.ArgumentParser(description='OpenShift app create end-to-end test')
+    parser = argparse.ArgumentParser(description='OpenShift Monitoring Project Termination Stats')
     parser.add_argument('-v', '--verbose', action='store_true', default=None, help='Verbose?')
-    parser.add_argument('--debug', action='store_true', default=None, help='Debug?')
-    parser.add_argument('--name', default="openshift/hello-openshift:v1.0.6", help='app template')
     return parser.parse_args()
 
 def pod_name(name):
