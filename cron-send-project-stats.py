@@ -233,7 +233,7 @@ def main():
     if args.verbose:
         logger.setLevel(logging.DEBUG)
 
-    projects_info = ocutil._run_cmd("oc get projects -o yaml")
+    projects_info = OCUtil()._run_cmd("oc get projects -o yaml")
 
     #deletionTimestamp
     print 'start checking'
