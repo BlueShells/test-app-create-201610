@@ -59,12 +59,13 @@ def main():
     if args.verbose:
         logger.setLevel(logging.DEBUG)
 
+    logger.info("Starting")
+
     projects_info = OCUtil()._run_cmd("oc get projects -o yaml")
 
-    #deletionTimestamp
-    print 'start checking'
-    print 'current project number is %s' % len(projects_info['items'])
     time_keeps_max = 0
+    logger.info('Count of projects: %s', len(projects_info['items']))
+
     try:
         for pro in projects_info['items']:
             #print pro['status']['phase']
@@ -82,15 +83,16 @@ def main():
                 if current_time > old_time:
                     time_keeps_max = max(time_keeps_max, time_keeps.seconds)
                 else:
-                    print 'something wrong , the pod said its been terminating before created'
+                    logger.warning('current_time > old_time')
 
-                print time_keeps_max
+                logger.debug('%s', time_keeps_max)
 
-    except ValueError, e:
-        print 'something wrong when try to check the project one by one:', e
+    except Exception as e:
+        logger.critical('Error checking projects')
+        logger.critical(e)
 
     send_zagg_data(time_keeps_max)
-    print 'the logest Terminating project is there for %s seconds' % time_keeps_max
+    logger.info('Oldest Terminating project: %s seconds', time_keeps_max)
 
 if __name__ == "__main__":
     main()
