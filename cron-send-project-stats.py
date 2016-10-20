@@ -51,6 +51,36 @@ def send_zagg_data(keep_time):
 
     logger.info("Data sent in %s seconds", str(time.time() - zgs_time))
 
+def testProjects(projects):
+    logger.info('testProjects() count of projects: %s', len(testProjects))
+
+    time_keeps_max = 0
+    for project in testProjects:
+        logger.debug(
+            "Project: %s Status: %s",
+            project['metadata']['name'],
+            project['status']['phase']
+        )
+
+        if project['status']['phase'] == 'Terminating':
+            logger.debug('project[\'metadata\'][\'deletionTimestamp\'] %s', project['metadata']['deletionTimestamp'])
+
+            old_time = project['metadata']['deletionTimestamp']
+
+            current_time = datetime.datetime.now()
+
+            time_keeps = current_time - old_time
+            logger.debug('Project in Terminating status for %s', time_keeps.seconds)
+
+            if current_time > old_time:
+                time_keeps_max = max(time_keeps_max, time_keeps.seconds)
+            else:
+                logger.warning('current_time > old_time')
+
+            logger.debug('%s', time_keeps_max)
+
+    return time_keeps_max
+
 def main():
     ''' main() '''
     args = parse_args()
@@ -63,37 +93,7 @@ def main():
     # TODO: include this in library
     projects_info = OCUtil()._run_cmd("oc get projects -o yaml")
 
-    logger.info('Count of projects: %s', len(projects_info['items']))
-
-    try:
-        time_keeps_max = 0
-        for project in projects_info['items']:
-            logger.debug(
-                "Project: %s Status: %s",
-                project['metadata']['name'],
-                project['status']['phase']
-            )
-
-            if project['status']['phase'] == 'Terminating':
-                logger.debug('project[\'metadata\'][\'deletionTimestamp\'] %s', project['metadata']['deletionTimestamp'])
-
-                old_time = project['metadata']['deletionTimestamp']
-
-                current_time = datetime.datetime.now()
-
-                time_keeps = current_time - old_time
-                logger.debug('Project in Terminating status for %s', time_keeps.seconds)
-
-                if current_time > old_time:
-                    time_keeps_max = max(time_keeps_max, time_keeps.seconds)
-                else:
-                    logger.warning('current_time > old_time')
-
-                logger.debug('%s', time_keeps_max)
-
-    except:
-        logger.exception('Error checking projects')
-
+    time_keeps_max = testProjects(projects_info['items']):
     send_zagg_data(time_keeps_max)
     logger.info('Oldest Terminating project: %s seconds', time_keeps_max)
 
