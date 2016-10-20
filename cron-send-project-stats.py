@@ -92,8 +92,8 @@ def main():
     projects_info = OCUtil()._run_cmd("oc get projects -o yaml")
 
     time_keeps_max = testProjects(
-        projects_info['items']),
-        current_time=datetime.datetime.now()
+        projects_info['items'],
+        current_time=datetime.datetime.now(),
     )
 
     send_zagg_data(time_keeps_max)

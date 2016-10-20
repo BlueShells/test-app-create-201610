@@ -90,7 +90,7 @@ def main():
 
     time_keeps_max = testProjects(
         projects['items'],
-        current_time=datetime.datetime.now()
+        current_time=datetime.datetime.now(),
     )
     logger.info('Oldest Terminating project: %s seconds', time_keeps_max)
 
