@@ -46,7 +46,7 @@ def send_zagg_data(keep_time):
 
     try:
         zgs.send_metrics()
-    except Exception as e:
+    except:
         logger.exception('Error sending to Zagg')
 
     logger.info("Data sent in %s seconds", str(time.time() - zgs_time))
