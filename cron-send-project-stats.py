@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-'''
-    Quick and dirty create application check for v3
-'''
+''' OpenShift v3 Monitoring '''
 
 # Adding the ignore because it does not like the naming of the script
 # to be different than the class name
