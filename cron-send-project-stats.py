@@ -33,14 +33,18 @@ def parse_args():
 
 def send_zagg_data(keep_time):
     ''' send data to Zagg'''
+    logger.debug('send_zagg_data()')
+
     zgs_time = time.time()
     zgs = ZaggSender()
-    print "Send data to Zagg"
     zgs.add_zabbix_keys({'openshift.master.project.terminating.time': keep_time})
+
     try:
         zgs.send_metrics()
-    except:
-        print "Error sending to Zagg: %s \n %s " % sys.exc_info()[0], sys.exc_info()[1]
+    except Exception as e:
+        logger.critical('Error sending to Zagg')
+        logger.critical(e)
+
     print "Data sent in %s seconds" % str(time.time() - zgs_time)
 
 def main():
