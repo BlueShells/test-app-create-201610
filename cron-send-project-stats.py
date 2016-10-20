@@ -76,8 +76,7 @@ def main():
             if project['status']['phase'] == 'Terminating':
                 logger.debug('project[\'metadata\'][\'deletionTimestamp\'] %s', project['metadata']['deletionTimestamp'])
 
-                temp_t = project['metadata']['deletionTimestamp'].replace('T', ' ').replace('Z', '')
-                old_time = datetime.datetime.strptime(temp_t, '%Y-%m-%d %H:%M:%S')
+                old_time = project['metadata']['deletionTimestamp']
 
                 current_time = datetime.datetime.now()
 
