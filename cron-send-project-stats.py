@@ -68,7 +68,7 @@ def main():
         time_keeps_max = 0
         for project in projects_info['items']:
             logger.debug(
-                "Project: [%s] Status: %s",
+                "Project: %s Status: %s",
                 project['metadata']['name'],
                 project['status']['phase']
             )
@@ -82,7 +82,7 @@ def main():
                 current_time = datetime.datetime.now()
 
                 time_keeps = current_time - old_time
-                logger.debug('Project in Terminating status for %s', time_keeps)
+                logger.debug('Project in Terminating status for %s', time_keeps.seconds)
 
                 if current_time > old_time:
                     time_keeps_max = max(time_keeps_max, time_keeps.seconds)
